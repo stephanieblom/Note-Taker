@@ -17,7 +17,6 @@
     <a class="navbar-brand" href="/">Note Taker
     </a>
     <div class="icons">
-      <i class="fas fa-pen text-light new-note"></i>
       <i class="fas fa-save text-light save-note"></i>
     </div>
   </nav>
@@ -43,6 +42,7 @@
     $(document).ready( async function(){
 
       let myNotes = await $.get('/notes')
+      console.log('appending notes:'+ myNotes)
       let noteCount = 0
 
       myNotes.forEach(insertNote)
@@ -101,8 +101,10 @@
                 setTimeout( function(){ location.href = '/index.html'; }, 5000 );
             }
 
-            function deleteNote(id){
-                
+            async function deleteNote(id){
+
+                const update = await $.post( `/api-notes/${id}` );
+
             }
         })
     });

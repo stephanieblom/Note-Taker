@@ -54,22 +54,22 @@ app.post( '/api/notes', function( req, res ){
     res.send( { message: `saved: ${req.body.name}` } );
 });
 
-app.get( '/api/notes:id', async function( req, res ){
-  fs.readFile("db.json", "utf8", function(error, data) {
+app.post( '/api/notes/:id', async function( req, res ){
 
-    if (error) {
-      return console.log(error);
-    }
-  
-    console.log(data);
-    myNotes = JSON.parse(data);
-  
-  });
     const id = req.params.id;
 
     myNotes.splice(id, 1)
     console.log(`Notes: ${myNotes}`)
-    // tablelist is FIRST 5
+
+    fs.writeFile("db.json", myNotes, function(error)  {
+
+      if (error) {
+        return console.log(error);
+      }
+    
+      console.log(myNotes);
+    
+    });
     res.send( { message: `Finished deleting id ${id}` } );
 }) // app.delete()
 
