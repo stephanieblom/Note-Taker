@@ -40,9 +40,28 @@
 
   <script>
 
-    $(document).ready( function(){
+    $(document).ready( async function(){
 
+      let myNotes = await $.get('/notes')
       let noteCount = 0
+
+      myNotes.forEach(insertNote)
+
+      function insertNote(note, idx){
+
+        $('.list-group').append( `
+          <li class="list-group-item mt-4" data-id="${idx}">
+            <div class='float-right'> 
+                <button class='btn btn-sm btn-danger' 
+                  onClick="deleteNote('${idx}')"><i class="fas fa-trash-alt"></i></button>
+              </div>
+              <h2>${note.title}</h2><hr>
+              <p>${note.text}</p>
+          </li>      
+      ` );
+          noteCount++; 
+      }
+      
   
         $('.save-note').click( async function( event ){
             event.preventDefault();
@@ -53,6 +72,15 @@
                 title: $('.note-title').val(),
                 text: $('.note-textarea').val(),
             };
+
+            $('.list-group').append( `
+                <li class="list-group-item mt-4" data-id="${noteCount}">
+                  <button class='btn btn-sm btn-danger' 
+                  onClick="deleteNote('${noteCount}')"><i class="fas fa-trash-alt"></i></button>
+                    <h2>${note.title}</h2><hr>
+                    <p>${note.text}</p>
+                </li>      
+            ` );
 
             noteCount++;
 
@@ -71,6 +99,10 @@
 
                 //redirect to the table list after 5s
                 setTimeout( function(){ location.href = '/index.html'; }, 5000 );
+            }
+
+            function deleteNote(id){
+                
             }
         })
     });

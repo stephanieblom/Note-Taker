@@ -26,7 +26,7 @@ app.get( '/notes', function( req, res ){
     }
   
     console.log(data);
-    if (data == NULL){
+    if (data == undefined){
       myNotes =[];
     }else 
     myNotes = JSON.parse(data)
@@ -36,24 +36,11 @@ app.get( '/notes', function( req, res ){
 })
 
 app.post( '/api/notes', function( req, res ){
-  fs.readFile("db.json", "utf8", function(error, data) {
-
-    if (error) {
-      return console.log(error);
-    }
-  
-    console.log(`data: ${data}`);
-    if (data == NULL){
-      myNotes =[];
-    }else 
-    myNotes = JSON.parse(data)
-  
-  });
   
     console.log( `<< inserting note: `, req.body );
     // save the data to our table
     myNotes.push( req.body );
-    myNotes = JSON.stringify(myNotes)
+    myNotes = JSON.stringify( myNotes )
     
     fs.writeFile("db.json", myNotes, function(error)  {
 
@@ -61,7 +48,7 @@ app.post( '/api/notes', function( req, res ){
         return console.log(error);
       }
     
-      console.log(data);
+      console.log(myNotes);
     
     });
     res.send( { message: `saved: ${req.body.name}` } );
