@@ -22,22 +22,23 @@ app.get( '/notes', function( req, res ){
   fs.readFile("db.json", "utf8", function(error, data) {
 
     if (error) {
-      return console.log(error);
+      return console.log(`error ${error}`);
     }
   
-    console.log(data);
     if (data == undefined){
-      myNotes =[];
-    }else 
-    myNotes = JSON.parse(data)
+      console.log(`no notes to display from db`);
+    }else{
+      myNotes = data
+    }
+    console.log(`My Notes: ${myNotes}`)
   
   });
     res.send( myNotes );
-})
+});
 
 app.post( '/api/notes', function( req, res ){
   
-    console.log( `<< inserting note: `, req.body );
+    console.log( `<< inserting note: `, req.body.toString() );
     // save the data to our table
     myNotes.push( req.body );
     myNotes = JSON.stringify( myNotes )
@@ -64,7 +65,7 @@ app.post( '/api/notes/:id', async function( req, res ){
     fs.writeFile("db.json", myNotes, function(error)  {
 
       if (error) {
-        return console.log(error);
+         console.log(error);
       }
     
       console.log(myNotes);

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
     crossorigin="anonymous">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 </head>
 
 <body>
@@ -34,8 +35,7 @@
       </div>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="/assets/js/index.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
   <script>
 
@@ -45,23 +45,26 @@
       console.log('appending notes:'+ myNotes)
       let noteCount = 0
 
-      myNotes.forEach(insertNote)
+      if (myNotes == undefined){
+        console.log(`no notes to append yet`)
+      }else{
+        myNotes = JSON.parse(myNotes)
+        for(i=0; i<myNotes.length; i++) {
+        console.log(`appending note: ${myNotes[i].title}`)
 
-      function insertNote(note, idx){
-
-        $('.list-group').append( `
-          <li class="list-group-item mt-4" data-id="${idx}">
-            <div class='float-right'> 
-                <button class='btn btn-sm btn-danger' 
-                  onClick="deleteNote('${idx}')"><i class="fas fa-trash-alt"></i></button>
-              </div>
-              <h2>${note.title}</h2><hr>
-              <p>${note.text}</p>
-          </li>      
-      ` );
-          noteCount++; 
+          $('.list-group').append( `
+            <li class="list-group-item mt-4" data-id="${noteCount}">
+              <div class='float-right'> 
+                  <button class='btn btn-sm btn-danger' 
+                    onClick="deleteNote('${noteCount}')"><i class="fas fa-trash-alt"></i></button>
+                </div>
+                <h2>${myNotes[i].title}</h2><hr>
+                <p>${myNotes[i].text}</p>
+            </li>      
+        ` );
+            noteCount++; 
+        }
       }
-      
   
         $('.save-note').click( async function( event ){
             event.preventDefault();
@@ -85,6 +88,8 @@
             noteCount++;
 
             apiResult = await $.post( '/api/notes', note );
+
+            console.log(`apiResult = ${apiResult}`)
           
             // disable the submit button
 
@@ -100,18 +105,26 @@
                 //redirect to the table list after 5s
                 setTimeout( function(){ location.href = '/index.html'; }, 5000 );
             }
-
-            async function deleteNote(id){
-
-                const update = await $.post( `/api-notes/${id}` );
-
-            }
         })
+
+
     });
 
 
+      
 
-  </script>
+    async function deleteNote(id){
+
+      try{
+        const update = await $.post( `/api/notes/${id}` );
+        }catch(err){
+          console.log(err);
+        }
+    }
+
+
+  </script> 
+ 
 </body>
 
 </html>
