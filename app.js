@@ -37,6 +37,19 @@ app.get('/notes', function (req, res) {
 });
 
 app.post('/api/notes', function (req, res) {
+  fs.readFile("db.json", "utf8", function (error, data) {
+
+    if (error) {
+      return console.log(`error ${error}`);
+    }
+
+    if (data == undefined || data == "") {
+      console.log(`no notes to display from db`);
+    } else {
+      myNotes = data
+    }
+    console.log(`My Notes: ${myNotes}`)
+  });
 
   console.log(`<< inserting note: `, req.body);
   console.log(typeof(myNotes));
@@ -57,26 +70,40 @@ app.post('/api/notes', function (req, res) {
   res.send({ message: `saved: ${req.body.name}` });
 });
 
-// app.post('/api/notes/:id', async function (req, res) {
+app.post('/api/notes/:id', async function (req, res) {
 
-//   const id = req.params.id;
-//   console.log(`ID: ${id}`)
-//   console.log(`Notes: ${myNotes}`)
-//   console.log(typeof (myNotes))
+  fs.readFile("db.json", "utf8", function (error, data) {
 
-//   myNotes = JSON.parse(myNotes)
-//   splicedNotes = myNotes.splice(id, 1)
-//   console.log(`Notes: ${splicedNotes}`)
+    if (error) {
+      return console.log(`error ${error}`);
+    }
 
-//   fs.writeFile("db.json", JSON.stringify(splicedNotes), function (error) {
+    if (data == undefined || data == "") {
+      console.log(`no notes to display from db`);
+    } else {
+      myNotes = data
+    }
+    console.log(`My Notes read from db: ${myNotes}`)
+  });
 
-//     if (error) {
-//       console.log(error);
-//     }
+  const id = req.params.id;
+  console.log(`ID: ${id}`)
+  console.log(`Note type: `+ typeof (myNotes))
 
-//     console.log(splicedNotes);
+  let updateNotes = JSON.parse(myNotes)
+  updateNotes.splice(id, 1)
+  updateNotes = JSON.stringify(updateNotes);
+  console.log(`New notes after delete: ${updateNotes}`)
 
-//   });
-//   res.send({ message: `Finished deleting id ${id}` });
-// }) // app.delete()
+  fs.writeFile("db.json", updateNotes, function (error) {
+
+    if (error) {
+      console.log(error);
+    }
+
+    console.log(updateNotes);
+
+  });
+  res.send({ message: `Finished deleting id ${id}` });
+}) // app.delete()
 

@@ -1,6 +1,7 @@
 # 09-Note-Taker
 
-# Description
+# DEMO 
+![Notes Demo](public/assets/Notes.gif)
 
 This application is used to write, save, and delete notes. This application uses an express backend to save and retrieve note data from a JSON file.
 
