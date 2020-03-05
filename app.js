@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser')
 const fs = require("fs");
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const app = express();
 
 // to serve static content from the 'html' directory
