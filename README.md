@@ -3,7 +3,7 @@
 # Heroku Link 
 [Note Taker](http://my-note-takerz.herokuapp.com/)
 
-# DEMO 
+# Demo 
 ![Notes Demo](public/assets/Notes.gif)
 
 # Description 
