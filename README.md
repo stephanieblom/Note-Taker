@@ -1,4 +1,7 @@
-# 09-Note-Taker
+# Note-Taker
+
+# Heroku Link 
+[Note Taker](http://my-note-takerz.herokuapp.com/)
 
 # DEMO 
 ![Notes Demo](public/assets/Notes.gif)
